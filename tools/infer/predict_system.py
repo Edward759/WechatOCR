@@ -18,7 +18,7 @@ __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
 sys.path.append(os.path.abspath(os.path.join(__dir__, '../..')))
 
-import tools.infer.utility as utility
+
 from ppocr.utils.utility import initial_logger
 
 logger = initial_logger()
@@ -129,11 +129,13 @@ def sorted_boxes(dt_boxes):
     return _boxes
 
 
+
 def main(args):
     image_file_list = get_image_file_list(args.image_dir)
     text_sys = TextSystem(args)
     is_visualize = True
     font_path = args.vis_font_path
+    results = []
     for image_file in image_file_list:
         img, flag = check_and_read_gif(image_file)
         if not flag:
@@ -148,10 +150,12 @@ def main(args):
 
         drop_score = 0.5
         dt_num = len(dt_boxes)
+
         for dno in range(dt_num):
             text, score = rec_res[dno]
             if score >= drop_score:
                 text_str = "%s, %.3f" % (text, score)
+                results.append(text)
                 print(text_str)
 
         if is_visualize:
@@ -176,6 +180,4 @@ def main(args):
             print("The visualized image saved in {}".format(
                 os.path.join(draw_img_save, os.path.basename(image_file))))
 
-
-if __name__ == "__main__":
-    main(utility.parse_args())
+    return results

@@ -17,7 +17,6 @@ import os, sys
 from ppocr.utils.utility import initial_logger
 
 logger = initial_logger()
-from paddle.fluid.core import PaddleTensor
 from paddle.fluid.core import AnalysisConfig
 from paddle.fluid.core import create_paddle_predictor
 import cv2
