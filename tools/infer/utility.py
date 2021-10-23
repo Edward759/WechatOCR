@@ -27,21 +27,21 @@ from PIL import Image, ImageDraw, ImageFont
 import math
 
 
-def parse_args():
+def parse_args(imgdir):
     def str2bool(v):
         return v.lower() in ("true", "t", "1")
 
     parser = argparse.ArgumentParser()
     # params for prediction engine
-    parser.add_argument("--use_gpu", type=str2bool, default=True)
+    parser.add_argument("--use_gpu", type=str2bool, default=False)
     parser.add_argument("--ir_optim", type=str2bool, default=True)
     parser.add_argument("--use_tensorrt", type=str2bool, default=False)
     parser.add_argument("--gpu_mem", type=int, default=8000)
 
     # params for text detector
-    parser.add_argument("--image_dir", type=str)
+    parser.add_argument("--image_dir", type=str, default=imgdir)
     parser.add_argument("--det_algorithm", type=str, default='DB')
-    parser.add_argument("--det_model_dir", type=str)
+    parser.add_argument("--det_model_dir", type=str, default='./inference/ch_ppocr_mobile_v1.1_det_infer/')
     parser.add_argument("--det_max_side_len", type=float, default=960)
 
     # DB parmas
@@ -61,7 +61,7 @@ def parse_args():
 
     # params for text recognizer
     parser.add_argument("--rec_algorithm", type=str, default='CRNN')
-    parser.add_argument("--rec_model_dir", type=str)
+    parser.add_argument("--rec_model_dir", type=str, default='./inference/ch_ppocr_mobile_v1.1_rec_infer/')
     parser.add_argument("--rec_image_shape", type=str, default="3, 32, 320")
     parser.add_argument("--rec_char_type", type=str, default='ch')
     parser.add_argument("--rec_batch_num", type=int, default=6)
@@ -75,8 +75,8 @@ def parse_args():
         "--vis_font_path", type=str, default="./doc/simfang.ttf")
 
     # params for text classifier
-    parser.add_argument("--use_angle_cls", type=str2bool, default=False)
-    parser.add_argument("--cls_model_dir", type=str)
+    parser.add_argument("--use_angle_cls", type=str2bool, default=True)
+    parser.add_argument("--cls_model_dir", type=str, default='./inference/ch_ppocr_mobile_v1.1_cls_infer/')
     parser.add_argument("--cls_image_shape", type=str, default="3, 48, 192")
     parser.add_argument("--label_list", type=list, default=['0', '180'])
     parser.add_argument("--cls_batch_num", type=int, default=30)
