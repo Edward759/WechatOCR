@@ -128,14 +128,13 @@ def sorted_boxes(dt_boxes):
             _boxes[i + 1] = tmp
     return _boxes
 
-
-
 def main(args):
     image_file_list = get_image_file_list(args.image_dir)
     text_sys = TextSystem(args)
-    is_visualize = True
+    is_visualize = False
     font_path = args.vis_font_path
-    results = []
+    single_result = []
+    result_set = []
     for image_file in image_file_list:
         img, flag = check_and_read_gif(image_file)
         if not flag:
@@ -155,8 +154,8 @@ def main(args):
             text, score = rec_res[dno]
             if score >= drop_score:
                 text_str = "%s, %.3f" % (text, score)
-                results.append(text)
-                print(text_str)
+                single_result.append(text)
+                #print(text_str)
 
         if is_visualize:
             image = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
@@ -180,4 +179,4 @@ def main(args):
             print("The visualized image saved in {}".format(
                 os.path.join(draw_img_save, os.path.basename(image_file))))
 
-    return results
+    return single_result

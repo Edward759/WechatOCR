@@ -1,40 +1,42 @@
 import tools.infer.predict_system as predict_system
 import tools.infer.utility as utility
+import excel.excel as excel
+import os
 
 info = {
-    '收款人':'',
-    '金额':'',
-    '当前状态':'',
-    '商品': '',
-    '商户全称':'',
-    '支付时间': '',
-    '支付方式': '',
-    '交易单号': '',
-    '商户单号': ''
+    '收款人': [],
+    '金额': [],
+    '当前状态': [],
+    '商品': [],
+    '商户全称': [],
+    '支付时间': [],
+    '支付方式': [],
+    '交易单号': [],
+    '商户单号': []
 }
-def ToExcel(listData):
+def transfer(single_result):
     i = 0;
-    while i < len(listData):
-        if listData[i] == '当前状态':
-            info['收款人'] = listData[i - 2]
-            info['金额'] = listData[i - 1]
+    while i < len(single_result):
+        if single_result[i] == '当前状态':
+            info['收款人'].append(single_result[i - 2])
+            info['金额'].append(str(abs(float(single_result[i - 1]))))
             for key in info:
                 if key not in ['收款人', '金额']:
                     allKeys = info.keys()
                     j = i + 1
-                    s = listData[j]
+                    s = single_result[j]
                     j += 1
                     finish = False;
-                    while listData[j] not in allKeys:
+                    while single_result[j] not in allKeys:
                         if key == '商户单号':
                             finish = True
                             if '扫码' in s:
                                 s = ''
-                        s += listData[j]
+                        s += single_result[j]
                         j += 1
-                        if '群收款' in listData[j]:
+                        if '群收款' in single_result[j]:
                             break
-                    info[key] = s
+                    info[key].append(s)
                     i = j
                     if finish:
                         return
@@ -43,6 +45,9 @@ def ToExcel(listData):
 
 
 if __name__ == "__main__":
-    result = predict_system.main(utility.parse_args('C:/Users/75926/Desktop/4.jpg'))
-    ToExcel(result)
+    filelist = os.listdir('C:/Users/75926/Desktop/images/')
+    for filename in filelist:
+        result = predict_system.main(utility.parse_args('C:/Users/75926/Desktop/images/' + filename))
+        transfer(result)
+    excel.To_Excel(info)
     print(info)
