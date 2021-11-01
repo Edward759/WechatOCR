@@ -2,6 +2,10 @@ import tools.infer.predict_system as predict_system
 import tools.infer.utility as utility
 import excel.excel as excel
 import os
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from UI.set_ui import MyMainWindow
+from UI.WeChatOCR import Ui_MainWindow
 
 info = {
     '收款人': [],
@@ -44,10 +48,18 @@ def transfer(single_result):
             i += 1
 
 
-if __name__ == "__main__":
-    filelist = os.listdir('C:/Users/75926/Desktop/images/')
-    for filename in filelist:
-        result = predict_system.main(utility.parse_args('C:/Users/75926/Desktop/images/' + filename))
-        transfer(result)
-    excel.To_Excel(info)
-    print(info)
+# if __name__ == "__main__":
+#     filelist = os.listdir('C:/Users/75926/Desktop/images/')
+#     for filename in filelist:
+#         result = predict_system.main(utility.parse_args('C:/Users/75926/Desktop/images/' + filename))
+#         transfer(result)
+#     excel.To_Excel(info)
+#     print(info)
+
+#from UI.set_ui import testUI
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ui = MyMainWindow()
+
+    ui.show()
+    sys.exit(app.exec_())
